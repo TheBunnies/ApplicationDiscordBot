@@ -42,15 +42,26 @@ public class Bot
         Client.Dispose();
     }
 
+    public DiscordComponent GetButton(string label, string emoji = "")
+    {
+        var myButton = new DiscordButtonComponent(
+            ButtonStyle.Success,
+            "my_very_cool_button",
+            label,
+            false,
+            string.IsNullOrEmpty(emoji) ? null : new DiscordComponentEmoji(emoji));
+
+        return myButton;
+    }
+
     private async Task<DiscordEmbed> BakeEmbed(ModalSubmitEventArgs e, bool isAuthor = false)
     {
         var embed = new DiscordEmbedBuilder()
             .AddField("Ф. И.", e.Values["m-name"])
             .AddField("Описание ситуации и причина", e.Values["m-description"])
             .WithColor(DiscordColor.HotPink)
-            .WithTimestamp(DateTime.Now)
-            .WithFooter("The bot was created by Ultra_Rabbit#7118");
-        
+            .WithTimestamp(DateTime.Now);
+
         if (!string.IsNullOrEmpty(e.Values["m-screenshot"]) && await IsImageUrl(e.Values["m-screenshot"]))
             embed.WithImageUrl(e.Values["m-screenshot"]);
         if (!string.IsNullOrWhiteSpace(e.Values["m-discord"]))
@@ -111,8 +122,9 @@ public class Bot
             await e.Interaction.Guild.Owner.SendMessageAsync(embed: authorEmbed);
 
             var embed = await BakeEmbed(e);
-
-            await e.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().AddEmbed(embed));
+            await e.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                .AddEmbed(embed)
+                .AddComponents(GetButton("Создать свою анкету")));
         }
     }
 

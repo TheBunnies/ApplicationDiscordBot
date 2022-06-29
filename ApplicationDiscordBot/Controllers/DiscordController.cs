@@ -1,4 +1,3 @@
-using DSharpPlus;
 using DSharpPlus.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,12 +19,7 @@ public class DiscordController : ControllerBase
         try
         {
             var channel = await _bot.Client.GetChannelAsync(channelId);
-            var myButton = new DiscordButtonComponent(
-                ButtonStyle.Success,
-                "my_very_cool_button",
-                label,
-                false,
-                new DiscordComponentEmoji(emoji));
+            var myButton = _bot.GetButton(label, emoji);
                 
             var builder = new DiscordMessageBuilder()
                 .WithContent(content)
