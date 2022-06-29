@@ -15,7 +15,7 @@ public class DiscordController : ControllerBase
         _bot = bot;
     }
     [HttpPost(nameof(Application))]
-    public async Task<IActionResult> Application(ulong channelId, string label, string emoji, [FromBody]string content)
+    public async Task<IActionResult> Application(ulong channelId, string label, string emoji, string content)
     {
         try
         {
