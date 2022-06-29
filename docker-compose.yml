@@ -1,0 +1,9 @@
+version: "3.9" # Docker compose version, NOT project version
+
+services:
+  application-bot:
+    container_name: discord-application
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
