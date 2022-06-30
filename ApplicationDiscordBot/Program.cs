@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.Configure<BotConfiguration>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.AddSingleton<Bot>();
+builder.Services.AddSingleton<BotService>();
 builder.Services.AddHostedService<BotHostedService>();
 
 builder.Services.AddControllers();

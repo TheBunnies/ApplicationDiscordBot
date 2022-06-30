@@ -1,18 +1,19 @@
-﻿using ApplicationDiscordBot.Models;
+﻿using ApplicationDiscordBot.Contracts;
+using ApplicationDiscordBot.Models;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using Microsoft.Extensions.Options;
 
-namespace ApplicationDiscordBot;
+namespace ApplicationDiscordBot.Services;
 
-public class Bot
+public class BotService : IBotService
 {
     public DiscordClient Client { get; }
 
     private readonly IOptions<BotConfiguration> _config;
 
-    public Bot(IOptions<BotConfiguration> config)
+    public BotService(IOptions<BotConfiguration> config)
     {
         _config = config;
         
@@ -95,7 +96,7 @@ public class Bot
         if (e.Id == "my_very_cool_button")
         {
             var modal = new DiscordInteractionResponseBuilder()
-                .WithTitle("Жалобная анкета")
+                .WithTitle("Жалоба на мудака")
                 .WithCustomId("m-modal")
                 .AddComponents(new TextInputComponent(label: "Ф.И.", customId: "m-name", value: string.Empty,
                     max_length: 100))
@@ -118,13 +119,14 @@ public class Bot
         if (e.Values.ContainsKey("m-name"))
         {
             var authorEmbed = await BakeEmbed(e, true);
-                
-            await e.Interaction.Guild.Owner.SendMessageAsync(embed: authorEmbed);
+            
+            if (e.Interaction.User.Id != e.Interaction.Guild.Owner.Id)
+                await e.Interaction.Guild.Owner.SendMessageAsync(embed: authorEmbed);
 
             var embed = await BakeEmbed(e);
             await e.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                 .AddEmbed(embed)
-                .AddComponents(GetButton("Создать свою анкету")));
+                .AddComponents(GetButton("Записать мудака")));
         }
     }
 

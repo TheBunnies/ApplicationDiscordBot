@@ -1,3 +1,4 @@
+using ApplicationDiscordBot.Contracts;
 using DSharpPlus.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,19 +8,19 @@ namespace ApplicationDiscordBot.Controllers;
 [Route("[controller]")]
 public class DiscordController : ControllerBase
 {
-    private readonly Bot _bot;
+    private readonly IBotService _botService;
 
-    public DiscordController(Bot bot)
+    public DiscordController(IBotService botService)
     {
-        _bot = bot;
+        _botService = botService;
     }
     [HttpPost(nameof(Application))]
     public async Task<IActionResult> Application(ulong channelId, string label, string emoji, string content)
     {
         try
         {
-            var channel = await _bot.Client.GetChannelAsync(channelId);
-            var myButton = _bot.GetButton(label, emoji);
+            var channel = await _botService.Client.GetChannelAsync(channelId);
+            var myButton = _botService.GetButton(label, emoji);
                 
             var builder = new DiscordMessageBuilder()
                 .WithContent(content)
