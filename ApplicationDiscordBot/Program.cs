@@ -1,4 +1,4 @@
-using ApplicationDiscordBot;
+using ApplicationDiscordBot.Contracts;
 using ApplicationDiscordBot.Models;
 using ApplicationDiscordBot.Services;
 
@@ -7,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.Configure<BotConfiguration>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.AddSingleton<BotService>();
+builder.Services.AddHttpClient<BotService>();
+builder.Services.AddSingleton<IBotService, BotService>();
 builder.Services.AddHostedService<BotHostedService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

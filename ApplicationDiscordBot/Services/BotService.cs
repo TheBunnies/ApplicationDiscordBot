@@ -11,18 +11,20 @@ public class BotService : IBotService
 {
     public DiscordClient Client { get; }
 
-    private readonly IOptions<BotConfiguration> _config;
-
-    public BotService(IOptions<BotConfiguration> config)
+    private readonly HttpClient _client;
+    public BotService(IOptions<BotConfiguration> config, HttpClient client)
     {
-        _config = config;
-        
+        _client = client;
         var dsConfig = new DiscordConfiguration
         {
             Token = config.Value.Token,
             TokenType = TokenType.Bot,
             AutoReconnect = true,
+#if DEBUG
             MinimumLogLevel = LogLevel.Debug,
+#else
+            MinimumLogLevel = LogLevel.Error,
+#endif
             Intents = DiscordIntents.AllUnprivileged
         };
         
@@ -84,10 +86,8 @@ public class BotService : IBotService
         {
             return result;
         }
-        var client = new HttpClient();
 
-        var res = await client.GetAsync(url);
-
+        var res = await _client.GetAsync(url);
         return res.ToString().Contains("Content-Type: image");
     }
 
