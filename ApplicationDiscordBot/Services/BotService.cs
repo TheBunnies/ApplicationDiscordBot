@@ -99,10 +99,10 @@ public class BotService : IBotService
                 .WithTitle("Жалоба на мудака")
                 .WithCustomId("m-modal")
                 .AddComponents(new TextInputComponent(label: "Ф.И.", customId: "m-name", value: string.Empty,
-                    max_length: 100))
+                    max_length: 100, required: true))
                 .AddComponents(new TextInputComponent(label: "Описание ситуации и причина", customId: "m-description",
                     value: string.Empty,
-                    min_length: 1,
+                    required: true,
                     style: TextInputStyle.Paragraph))
                 .AddComponents(new TextInputComponent(label: "Дискорд (если есть)", customId: "m-discord",
                     value: string.Empty,
@@ -110,6 +110,7 @@ public class BotService : IBotService
                 .AddComponents(new TextInputComponent(label: "Скрин (по желанию)", customId: "m-screenshot",
                     value: string.Empty, max_length: 360, required: false));
             
+
             await e.Interaction.CreateResponseAsync(InteractionResponseType.Modal, modal);
         }
     }
