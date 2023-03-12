@@ -61,7 +61,7 @@ public class BotService : IBotService
     {
         var embed = new DiscordEmbedBuilder()
             .AddField("Ф. И.", e.Values["m-name"])
-            .AddField("Описание ситуации и причина", e.Values["m-description"])
+            .WithDescription(e.Values["m-description"])
             .WithColor(DiscordColor.HotPink)
             .WithTimestamp(DateTime.Now);
 
